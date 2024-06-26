@@ -2,6 +2,7 @@
 
 namespace App\UserInterface\Cli\Command;
 
+use App\Infrastructure\UsersArchive;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -31,20 +32,19 @@ final class WelcomeCommand extends Command
         $name = $input->getArgument('name');
 
         //Eseguo l'azione
-        $filePath = 'Users.txt';
+        /*
+         Questo comando è solamente uno dei punti di accesso della mia applicazione
+         Non voglio che ci sia logica di business, ma al massimo logica di validazione:
+         verifico ad es. se il parametro del comando esiste ed è corretto,
+         ma la logica voglio che stia da un'altra parte, separata.
+         Questo mi permette di usarla in più situazioni, di poter evolverla
+         senza cambiare il comando, di cambiare il comando senza cambiare la logica.
+         Disaccoppiamneto è la parola d'ordine! :)
+         * */
+        $usersArchive = new UsersArchive('Users.txt');
+        $result = $usersArchive->addUser($name);
 
-        if (!file_exists($filePath)) {
-            touch($filePath);
-        }
-
-        $fileContent = file_get_contents('Users.txt');
-
-        if (str_contains($fileContent, $name)) {
-            $output->writeln('Welcome back ' .$name. '!');
-        } else {
-            file_put_contents('Users.txt', $name.PHP_EOL, FILE_APPEND);
-            $output->writeln('Welcome ' .$name. '!');
-        }
+        $output->writeln($result);
 
         return self::SUCCESS;
     }
