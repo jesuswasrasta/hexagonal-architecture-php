@@ -2,7 +2,8 @@
 
 namespace App\UserInterface\Cli\Command;
 
-use App\Infrastructure\UsersArchive;
+use App\Application\WelcomeService;
+use App\Infrastructure\FileUsersArchive;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -32,19 +33,26 @@ final class WelcomeCommand extends Command
         $name = $input->getArgument('name');
 
         //Eseguo l'azione
-        /*
-         Questo comando è solamente uno dei punti di accesso della mia applicazione
-         Non voglio che ci sia logica di business, ma al massimo logica di validazione:
-         verifico ad es. se il parametro del comando esiste ed è corretto,
-         ma la logica voglio che stia da un'altra parte, separata.
-         Questo mi permette di usarla in più situazioni, di poter evolverla
-         senza cambiare il comando, di cambiare il comando senza cambiare la logica.
-         Disaccoppiamneto è la parola d'ordine! :)
-         * */
-        $usersArchive = new UsersArchive('Users.txt');
-        $result = $usersArchive->addUser($name);
-
-        $output->writeln($result);
+        $usersArchive = new FileUsersArchive("Users.txt");
+        // Ho introdotto un servizio a livello Application, `WelcomeService`
+        // D'ora in poi sarà lui ad occuparsi di orchestrare
+        // la richiesta che arriva dal comando.
+        // La logica del comando tornerà a esse `stupida`:
+        // instanzio servizio e lo chiamo, ci pensa lui.
+        //
+        // Per fare il suo lavora, il `WelcomeService` si appoggia
+        // a un generico `Archive`, un oggetto che persite i dati.
+        // Ora ne ho creato uno che persiste su file di testo, come prima.
+        // Se domani voglio farne uno che persiste su JSON,
+        // mi basta implementarlo e iniettarlo qui al posto del FileUsersArchive.
+        // Non dovrò più cambiare il `WelcomeService` per salvare in altra modo 😏
+        //
+        // Ora qui sto costruendo e iniettando a mano questo Archive;
+        // a tendere potrei definirlo da configurazione e/o usare
+        // un registry di dependency injection.
+        $welcomeService = new WelcomeService($usersArchive);
+        $msg = $welcomeService->welcomeUser($name);
+        $output->writeln($msg);
 
         return self::SUCCESS;
     }
