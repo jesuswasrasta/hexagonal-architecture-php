@@ -12,6 +12,7 @@
     },
     "scripts": {
         "app:helloworld": "bin/console app:helloworld 'John Doe'",
+        "app:welcome": "bin/console app:welcome 'John Doe'",
         "test": "vendor/bin/phpunit"
     },
     "autoload": {
