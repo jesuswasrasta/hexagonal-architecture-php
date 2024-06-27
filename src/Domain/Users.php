@@ -22,7 +22,7 @@ class Users implements UsersInterface
         // un po' come si fa fa 'alla vecchia mnaiera' coi result code.
         // Il vantaggio rispetto ai result code è che la risposta
         // è un oggetto tipizzato, non una stringa o un numero...
-        // Non può 'essere confuso', non pu`ó essere null,
+        // Non può 'essere confuso', non può essere null,
         // non devo fare nessuna validazione 😏
 
         if ($this->exists($username)) {

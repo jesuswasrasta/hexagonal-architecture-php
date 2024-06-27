@@ -1,5 +1,5 @@
 # Hexagonal Architecture in PHP
-============================
+
 A simple PHP app to explain hexagonal architecture, DDD, and other common design principles.
 
 Miro board: https://miro.com/app/board/uXjVK5myd74=/
