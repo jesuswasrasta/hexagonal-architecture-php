@@ -21,7 +21,8 @@
     },
     "require-dev": {
         "roave/security-advisories": "dev-latest",
-        "phpunit/phpunit": "^9.5"
+        "phpunit/phpunit": "^9.5",
+        "phpstan/phpstan": "^1.11"
     },
     "scripts": {
         "app:helloworld": "bin/console app:helloworld 'John Doe'",

@@ -54,10 +54,18 @@
       <path value="$PROJECT_DIR$/vendor/symfony/dependency-injection" />
       <path value="$PROJECT_DIR$/vendor/sebastian/comparator" />
       <path value="$PROJECT_DIR$/vendor/sebastian/code-unit" />
+      <path value="$PROJECT_DIR$/vendor/phpstan/phpstan" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.0" />
+  <component name="PhpStan">
+    <PhpStan_settings>
+      <PhpStanConfiguration tool_path="$PROJECT_DIR$/vendor/bin/phpstan" timeout="60000" />
+    </PhpStan_settings>
+  </component>
   <component name="PhpStanOptionsConfiguration">
+    <option name="autoload" value="D:\Source\Github\jesuswasrasta\hexagonal-architecture-php\phpstan.neon.dist" />
+    <option name="config" value="D:\Source\Github\jesuswasrasta\hexagonal-architecture-php\phpstan.neon.dist" />
     <option name="transferred" value="true" />
   </component>
   <component name="PhpUnit">
