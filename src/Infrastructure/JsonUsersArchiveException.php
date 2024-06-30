@@ -14,7 +14,13 @@ class JsonUsersArchiveException extends Exception
 {
     private string $jsonFile = "";
 
-    public function __construct($jsonFile, $message = "", $code = 0, Throwable $previous = null)
+    /**
+     * @param string $jsonFile
+     * @param string $message
+     * @param int $code
+     * @param Throwable|null $previous
+     */
+    public function __construct(string $jsonFile, $message = "", $code = 0, Throwable $previous = null)
     {
         // Call the parent constructor
         parent::__construct($message, $code, $previous);

@@ -5,14 +5,26 @@ namespace App\Domain;
 
 class Users implements UsersInterface
 {
+    /**
+     * @var array<string>
+     */
     private array $users;
 
+    /**
+     * @param array<string> $users
+     */
     public function __construct(array $users = [])
     {
         $this->users = $users;
     }
 
-    public function add($username): ResultInterface
+    /**
+     * Adds a user to the collection if it doesn't already exist.
+     *
+     * @param string $username The username of the user to add.
+     * @return ResultInterface The result of the operation.
+     */
+    public function add(string $username): ResultInterface
     {
         // Qui l'oggetto rinforza le cosiddette **invarianti**,
         // le regole di business che devono essere rispettate.
@@ -33,12 +45,23 @@ class Users implements UsersInterface
         }
     }
 
+    /**
+     * Converts the object to an array.
+     *
+     * @return array<string> The array representation of the object.
+     */
     public function toArray(): array
     {
         return $this->users;
     }
 
-    private function exists($username): bool
+    /**
+     * Check if a username exists in the users array.
+     *
+     * @param string $username The username to check
+     * @return bool Returns true if the username exists, false otherwise
+     */
+    private function exists(string $username): bool
     {
         return (in_array($username, $this->users));
     }

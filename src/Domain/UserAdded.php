@@ -4,7 +4,7 @@ namespace App\Domain;
 
 class UserAdded implements ResultInterface
 {
-    private $username;
+    private string $username;
 
     public function __construct(string $username)
     {
