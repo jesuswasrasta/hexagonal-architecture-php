@@ -15,6 +15,16 @@ class WelcomeService
     public function __construct(UsersArchiveInterface $usersArchive)
     {
         $this->usersArchive = $usersArchive;
+        // La costruzione degli oggetti di dominio è un tema da non sottovalutare.
+        // Gli oggetti vanno costruiti in un unico punto,
+        // e bisogna stare attenti a costruire oggetti validi:
+        // in giro per il dominio NON devono esserci istanze di oggetti
+        // che non siano utilizzabili, o che siano "parialmente" valide.
+        // Euristica: ogni volta che devo fare cose tipo:
+        // - `if oggetto != null`
+        // - `if oggetto.proprietàPubblica != null`
+        // - `if oggetto.isValid()`
+        // so che sto sbagliando qualcosa... :D
         $this->users = new Users($this->usersArchive->readUsers());
     }
 
