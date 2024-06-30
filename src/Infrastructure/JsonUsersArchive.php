@@ -38,7 +38,7 @@ class JsonUsersArchive implements UsersArchiveInterface
         }
 
         $fileContent = file_get_contents($this->filename);
-        if ($fileContent != false) {
+        if ($fileContent) {
             $this->users = json_decode($fileContent, true);
         }
 
