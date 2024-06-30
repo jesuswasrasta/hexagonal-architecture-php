@@ -13,13 +13,22 @@ use App\Application\UsersArchiveInterface;
 class FileUsersArchive implements UsersArchiveInterface
 {
     private string $filename;
+
+    /**
+     * @var string[]
+     */
     private array $users = array();
 
-    public function __construct($filename)
+
+    public function __construct(string $filename)
     {
         $this->filename = $filename;
     }
 
+
+    /**
+     * @return string[]|bool
+     */
     public function readUsers(): array|bool
     {
         // Check if file exists before trying to read
@@ -29,7 +38,7 @@ class FileUsersArchive implements UsersArchiveInterface
         return $this->users;
     }
 
-    public function writeUsers($users): void
+    public function writeUsers(array $users): void
     {
         file_put_contents($this->filename, implode("\n", $users));
     }

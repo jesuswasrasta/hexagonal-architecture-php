@@ -7,41 +7,56 @@ use App\Application\UsersArchiveInterface;
 class JsonUsersArchive implements UsersArchiveInterface
 {
     private string $filename;
+
+    /**
+     * @var string[]
+     */
     private array $users = array();
 
 
-    public function __construct($filename)
+    public function __construct(string $filename)
     {
         $this->filename = $filename;
     }
 
     /**
-     * @throws JsonUsersArchiveException
+     * Reads the users from the file.
+     *
+     * If the file does not exist, it will create an empty file.
+     * Reads the contents of the file and parses it into an array.
+     * If the file content is not valid JSON, it throws a JsonUsersArchiveException.
+     *
+     * @return array<string>|bool The users array if the file exists and contains valid JSON data,
+     *                   otherwise false if there was an error reading the file.
+     * @throws JsonUsersArchiveException If the file contains invalid JSON data.
      */
     public function readUsers(): array|bool
     {
-        // Check if file exists before trying to read
-        if (file_exists($this->filename)) {
-            $this->users = file($this->filename, FILE_IGNORE_NEW_LINES);
-        } else {
-            // Create file
+        // Create file if not exists
+        if (!file_exists($this->filename)) {
             file_put_contents($this->filename, json_encode([]));
         }
 
         $fileContent = file_get_contents($this->filename);
-        $users = json_decode($fileContent, true);
+        if ($fileContent != false) {
+            $this->users = json_decode($fileContent, true);
+        }
 
         if (json_last_error() !== JSON_ERROR_NONE) {
             throw new JsonUsersArchiveException($this->filename, 'Invalid JSON data in file: ' . json_last_error_msg());
         }
 
-        return $users;
+        return $this->users;
     }
 
     /**
-     * @throws JsonUsersArchiveException
+     * Writes users data to a JSON file.
+     *
+     * @param array<string> $users An array containing the users data.
+     *
+     * @throws JsonUsersArchiveException If there is an error encoding the data to JSON format.
      */
-    public function writeUsers($users): void
+    public function writeUsers(array $users): void
     {
         $jsonData = json_encode($users, JSON_PRETTY_PRINT);
 
