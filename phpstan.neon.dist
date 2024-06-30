@@ -1,10 +1,16 @@
 parameters:
-    paths:
-        - src
-        - tests
-    level: 7
-    inferPrivatePropertyTypeFromConstructor: true
-    excludePaths:
-        - %currentWorkingDirectory%/bin*
-#    ignoreErrors:
-#        -
+# level: 7
+  level: max
+  paths:
+    - src
+    - tests
+  phpVersion: 80300
+  checkMissingIterableValueType: true
+  checkGenericClassInNonGenericObjectType: true
+  checkMissingCallableSignature: true
+  reportUnmatchedIgnoredErrors: true
+  ignoreErrors:
+    - '#Unsafe usage of new static#'
+
+  excludePaths:
+    - %currentWorkingDirectory%/bin*
