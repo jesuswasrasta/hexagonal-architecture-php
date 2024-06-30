@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Infrastructure;
 
@@ -30,7 +31,7 @@ class JsonUsersArchiveException extends Exception
     }
 
     // Add a custom method to get the invalid json file
-    public function getInvalidJsonFile()
+    public function getInvalidJsonFile(): string
     {
         return $this->jsonFile;
     }
