@@ -1,4 +1,17 @@
 {
+    "name": "jesuswasrasta/hexagonal-architecture-php",
+    "license": "GPL-3.0",
+    "description": "Hexagonal Architecture in PHP",
+    "authors": [
+        {
+            "name": "Ferdinando Santacroce",
+            "email": "ferdinando.santacroce@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "config": {
+        "bin-dir": "bin"
+    },
     "require": {
         "php": ">=8.0.2",
         "ext-mbstring": "*",
@@ -16,6 +29,10 @@
         "test": "vendor/bin/phpunit"
     },
     "autoload": {
+        "classmap": [
+            "src/",
+            "tests/"
+        ],
         "psr-4": {
             "App\\": ["src"]
         }
