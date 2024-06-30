@@ -4,6 +4,7 @@ namespace App\UserInterface\Cli\Command;
 
 use App\Application\WelcomeService;
 use App\Infrastructure\FileUsersArchive;
+use App\Infrastructure\JsonUsersArchive;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -33,23 +34,10 @@ final class WelcomeCommand extends Command
         $name = $input->getArgument('name');
 
         //Eseguo l'azione
-        $usersArchive = new FileUsersArchive("Users.txt");
-        // Ho introdotto un servizio a livello Application, `WelcomeService`
-        // D'ora in poi sarà lui ad occuparsi di orchestrare
-        // la richiesta che arriva dal comando.
-        // La logica del comando tornerà a esse `stupida`:
-        // instanzio servizio e lo chiamo, ci pensa lui.
-        //
-        // Per fare il suo lavora, il `WelcomeService` si appoggia
-        // a un generico `Archive`, un oggetto che persite i dati.
-        // Ora ne ho creato uno che persiste su file di testo, come prima.
-        // Se domani voglio farne uno che persiste su JSON,
-        // mi basta implementarlo e iniettarlo qui al posto del FileUsersArchive.
-        // Non dovrò più cambiare il `WelcomeService` per salvare in altra modo 😏
-        //
-        // Ora qui sto costruendo e iniettando a mano questo Archive;
-        // a tendere potrei definirlo da configurazione e/o usare
-        // un registry di dependency injection.
+        //$usersArchive = new FileUsersArchive("Users.txt");
+        // 🆕 Usiamo un Json!
+        $usersArchive = new JsonUsersArchive("Users.json");
+
         $welcomeService = new WelcomeService($usersArchive);
         $msg = $welcomeService->welcomeUser($name);
         $output->writeln($msg);
