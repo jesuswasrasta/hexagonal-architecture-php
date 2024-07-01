@@ -11,11 +11,11 @@ use App\Domain\UsersInterface;
 class WelcomeService
 {
     private UsersInterface $users;
-    private UsersArchiveInterface $usersArchive;
+    private UsersRepositoryInterface $usersRepository;
 
-    public function __construct(UsersArchiveInterface $usersArchive)
+    public function __construct(UsersRepositoryInterface $usersRepository)
     {
-        $this->usersArchive = $usersArchive;
+        $this->usersRepository = $usersRepository;
         // La costruzione degli oggetti di dominio è un tema da non sottovalutare.
         // Gli oggetti vanno costruiti in un unico punto,
         // e bisogna stare attenti a costruire oggetti validi:
@@ -26,7 +26,7 @@ class WelcomeService
         // - `if oggetto.proprietàPubblica != null`
         // - `if oggetto.isValid()`
         // so che sto sbagliando qualcosa... :D
-        $this->users = new Users($this->usersArchive->readUsers());
+        $this->users = new Users($this->usersRepository->readUsers());
     }
 
     public function welcomeUser($username): string
@@ -34,7 +34,7 @@ class WelcomeService
         $result = $this->users->add($username);
 
         if ($result instanceof UserAdded) {
-            $this->usersArchive->writeUsers($this->users->toArray());
+            $this->usersRepository->writeUsers($this->users->toArray());
             return "Welcome, " . $username . "!";
         }
         elseif ($result instanceof UserAlreadyPresent) {

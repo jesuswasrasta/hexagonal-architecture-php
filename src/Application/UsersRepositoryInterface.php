@@ -7,7 +7,7 @@ namespace App\Application;
 // A livello Application userò sempre questa inetrfaccia,
 // non mi interessa concretamente com'è implementata,
 // ne se salva su file di testo, JSON, MySql o altro 😄
-interface UsersArchiveInterface
+interface UsersRepositoryInterface
 {
     /**
      * Reads and returns an array of users from storage.

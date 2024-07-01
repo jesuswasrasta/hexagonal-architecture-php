@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace App\Infrastructure;
 
-use App\Application\UsersArchiveInterface;
+use App\Application\UsersRepositoryInterface;
 
-class JsonUsersArchive implements UsersArchiveInterface
+class JsonUsersRepository implements UsersRepositoryInterface
 {
     private string $filename;
 
@@ -25,11 +25,11 @@ class JsonUsersArchive implements UsersArchiveInterface
      *
      * If the file does not exist, it will create an empty file.
      * Reads the contents of the file and parses it into an array.
-     * If the file content is not valid JSON, it throws a JsonUsersArchiveException.
+     * If the file content is not valid JSON, it throws a JsonUsersRepositoryException.
      *
      * @return array<string>|bool The users array if the file exists and contains valid JSON data,
      *                   otherwise false if there was an error reading the file.
-     * @throws JsonUsersArchiveException If the file contains invalid JSON data.
+     * @throws JsonUsersRepositoryException If the file contains invalid JSON data.
      */
     public function readUsers(): array|bool
     {
@@ -44,7 +44,7 @@ class JsonUsersArchive implements UsersArchiveInterface
         }
 
         if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new JsonUsersArchiveException($this->filename, 'Invalid JSON data in file: ' . json_last_error_msg());
+            throw new JsonUsersRepositoryException($this->filename, 'Invalid JSON data in file: ' . json_last_error_msg());
         }
 
         return $this->users;
@@ -55,14 +55,14 @@ class JsonUsersArchive implements UsersArchiveInterface
      *
      * @param array<string> $users An array containing the users data.
      *
-     * @throws JsonUsersArchiveException If there is an error encoding the data to JSON format.
+     * @throws JsonUsersRepositoryException If there is an error encoding the data to JSON format.
      */
     public function writeUsers(array $users): void
     {
         $jsonData = json_encode($users, JSON_PRETTY_PRINT);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new JsonUsersArchiveException($this->filename, 'Error encoding data to JSON format: ' . json_last_error_msg());
+            throw new JsonUsersRepositoryException($this->filename, 'Error encoding data to JSON format: ' . json_last_error_msg());
         }
 
         file_put_contents($this->filename, $jsonData);

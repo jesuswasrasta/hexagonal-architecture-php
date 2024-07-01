@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace App\UserInterface\Cli\Command;
 
 use App\Application\WelcomeService;
-use App\Infrastructure\FileUsersArchive;
-use App\Infrastructure\JsonUsersArchive;
+use App\Infrastructure\FileUsersRepository;
+use App\Infrastructure\JsonUsersRepository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -35,11 +35,11 @@ final class WelcomeCommand extends Command
         $name = $input->getArgument('name');
 
         //Eseguo l'azione
-        //$usersArchive = new FileUsersArchive("Users.txt");
+        //$usersRepository = new FileUsersRepository("Users.txt");
         // 🆕 Usiamo un Json!
-        $usersArchive = new JsonUsersArchive("Users.json");
+        $usersRepository = new JsonUsersRepository("Users.json");
 
-        $welcomeService = new WelcomeService($usersArchive);
+        $welcomeService = new WelcomeService($usersRepository);
         $msg = $welcomeService->welcomeUser($name);
         $output->writeln($msg);
 

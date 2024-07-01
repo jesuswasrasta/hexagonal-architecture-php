@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure;
 
-use App\Application\UsersArchiveInterface;
+use App\Application\UsersRepositoryInterface;
 
 // È una delle implementazioni possibili dell'archivio utenti
 // Per adesso mi sta bene un file; se domani ho bisogno di un DB,
@@ -11,7 +11,7 @@ use App\Application\UsersArchiveInterface;
 // insiste su un DB e inietto quella, senza dover toccare una riga
 // dellla logica applicativa 😉
 
-class FileUsersArchive implements UsersArchiveInterface
+class FileUsersRepository implements UsersRepositoryInterface
 {
     private string $filename;
 

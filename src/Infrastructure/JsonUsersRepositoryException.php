@@ -7,11 +7,11 @@ use Exception;
 use Throwable;
 
 /**
- * Class JsonUsersArchiveException
+ * Class JsonUsersRepositoryException
  *
- * This exception is thrown when there is an error with a JSON users archive.
+ * This exception is thrown when there is an error with a JSON users Repository.
  */
-class JsonUsersArchiveException extends Exception
+class JsonUsersRepositoryException extends Exception
 {
     private string $jsonFile = "";
 
