@@ -5,9 +5,9 @@ namespace App\Domain;
 
 class UserAdded implements ResultInterface
 {
-    private string $username;
+    private Username $username;
 
-    public function __construct(string $username)
+    public function __construct(Username $username)
     {
         $this->username = $username;
     }

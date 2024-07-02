@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace App\Infrastructure;
 
 use App\Application\UsersRepositoryInterface;
+use App\Domain\Users;
+use App\Domain\UsersId;
 
 // È una delle implementazioni possibili dell'archivio utenti
 // Per adesso mi sta bene un file; se domani ho bisogno di un DB,
@@ -15,12 +17,6 @@ class FileUsersRepository implements UsersRepositoryInterface
 {
     private string $filename;
 
-    /**
-     * @var string[]
-     */
-    private array $users = array();
-
-
     public function __construct(string $filename)
     {
         $this->filename = $filename;
@@ -28,20 +24,31 @@ class FileUsersRepository implements UsersRepositoryInterface
 
 
     /**
-     * @return string[]|bool
+     * @return Users|bool
      */
-    public function readUsers(): array|bool
+    public function readUsers(): Users|bool
     {
+        // Create file if not exists
+        if (!file_exists($this->filename)) {
+            file_put_contents($this->filename, "");
+        }
+
+        $users = Users::create(UsersId::random());
         // Check if file exists before trying to read
         if (file_exists($this->filename)) {
-            $this->users = file($this->filename, FILE_IGNORE_NEW_LINES);
+            $fileContent = file($this->filename, FILE_IGNORE_NEW_LINES);
+            if ($fileContent !== false) {
+                $users->addFromStringArray($fileContent);
+            } else {
+                return false;
+            }
         }
-        return $this->users;
+        return $users;
     }
 
-    public function writeUsers(array $users): void
+    public function writeUsers(Users $users): void
     {
-        file_put_contents($this->filename, implode("\n", $users));
+        file_put_contents($this->filename, implode("\n", $users->toStringArray()));
     }
 }
 ?>

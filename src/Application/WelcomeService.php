@@ -5,40 +5,34 @@ namespace App\Application;
 
 use App\Domain\UserAdded;
 use App\Domain\UserAlreadyPresent;
-use App\Domain\Users;
-use App\Domain\UsersInterface;
+use App\Domain\Username;
 
 class WelcomeService
 {
-    private UsersInterface $users;
     private UsersRepositoryInterface $usersRepository;
 
     public function __construct(UsersRepositoryInterface $usersRepository)
     {
         $this->usersRepository = $usersRepository;
-        // La costruzione degli oggetti di dominio è un tema da non sottovalutare.
-        // Gli oggetti vanno costruiti in un unico punto,
-        // e bisogna stare attenti a costruire oggetti validi:
-        // in giro per il dominio NON devono esserci istanze di oggetti
-        // che non siano utilizzabili, o che siano "parialmente" valide.
-        // Euristica: ogni volta che devo fare cose tipo:
-        // - `if oggetto != null`
-        // - `if oggetto.proprietàPubblica != null`
-        // - `if oggetto.isValid()`
-        // so che sto sbagliando qualcosa... :D
-        $this->users = new Users($this->usersRepository->readUsers());
     }
 
-    public function welcomeUser($username): string
+    public function welcomeUser(string $user): string
     {
-        $result = $this->users->add($username);
+        // Carica user esistenti
+        $users = $this->usersRepository->readUsers();
+        if ($users !== false) {
+            $users->addRange($users);
+        }
+
+        $username = new Username($user);
+        $result = $users->add($username);
 
         if ($result instanceof UserAdded) {
-            $this->usersRepository->writeUsers($this->users->toArray());
-            return "Welcome, " . $username . "!";
+            $this->usersRepository->writeUsers($users);
+            return "Welcome, " . $user . "!";
         }
         elseif ($result instanceof UserAlreadyPresent) {
-            return "Welcome back, " . $username . "!";
+            return "Welcome back, " . $user . "!";
         }
         else{
             return $result->getMessage();
