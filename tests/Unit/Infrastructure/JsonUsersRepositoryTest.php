@@ -2,9 +2,10 @@
 
 namespace App\Unit\Infrastructure;
 
+use App\Domain\Username;
 use App\Domain\Users;
+use App\Domain\UsersId;
 use App\Infrastructure\JsonUsersRepository;
-use App\Infrastructure\JsonUsersRepositoryException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -12,21 +13,23 @@ use PHPUnit\Framework\TestCase;
  */
 class JsonUsersRepositoryTest extends TestCase
 {
-    /**
-     * @var string
-     */
+    private JsonUsersRepository $jsonUsersRepository;
     protected string $filename;
+    private UsersId $usersId;
+
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->filename = sys_get_temp_dir() . '/users.json';
+        $this->jsonUsersRepository = new JsonUsersRepository();
+        $this->usersId = UsersId::random();
+        $this->filename = $this->usersId->value() . ".json";
     }
 
     protected function tearDown(): void
     {
-        if (file_exists($this->filename)){
+        if (file_exists($this->filename)) {
             unlink($this->filename);
         }
 
@@ -34,44 +37,28 @@ class JsonUsersRepositoryTest extends TestCase
     }
 
     /**
-     * @covers ::readUsers
+     * @covers ::getById
      */
-    public function test_read_users_successful_case(): void
+    public function testGetByIdWhenFileDoesNotExist(): void
     {
-        $users = ['Username1','Username2','Username3'];
-        file_put_contents($this->filename, json_encode($users));
-        $jsonRepo = new JsonUsersRepository($this->filename);
+        $users = $this->jsonUsersRepository->getById($this->usersId);
 
-        $result = $jsonRepo->readUsers()->toStringArray();
-
-        $this->assertEquals($users, $result);
-    }
-
-    public function test_read_users_with_empty_file(): void
-    {
-        $jsonRepo = new JsonUsersRepository($this->filename);
-        $result = $jsonRepo->readUsers();
-        $this->assertTrue(is_a($result, Users::class));
-    }
-
-    public function test_read_users_with_invalid_json(): void
-    {
-        file_put_contents($this->filename, "{invalidJson: 'test'}");
-        $this->expectException(JsonUsersRepositoryException::class);
-        $jsonRepo = new JsonUsersRepository($this->filename);
-        $jsonRepo->readUsers();
+        $this->assertInstanceOf(Users::class, $users);
+        $this->assertEmpty($users->toStringArray());
     }
 
     /**
-     * @covers ::readUsers
+     * @covers ::getById
      */
-    public function testReadUsersInvalidJson(): void
+    public function testGetByIdWithValidJsonFile(): void
     {
-        file_put_contents($this->filename, "invalidJson");
-        $jsonRepo = new JsonUsersRepository($this->filename);
+        $users = Users::create($this->usersId);
+        $users->add(new Username("Giacomo Dino"));
+        $this->jsonUsersRepository->save($users);
 
-        $this->expectException(JsonUsersRepositoryException::class);
+        $result = $this->jsonUsersRepository->getById($this->usersId);
 
-        $jsonRepo->readUsers();
+        $this->assertInstanceOf(Users::class, $users);
+        $this->assertEquals($users, $result);
     }
 }

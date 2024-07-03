@@ -4,51 +4,69 @@ declare(strict_types=1);
 namespace App\Infrastructure;
 
 use App\Application\UsersRepositoryInterface;
+use App\Domain\Username;
 use App\Domain\Users;
-use App\Domain\UsersId;
+use App\Shared\Domain\Aggregate\AggregateInterface;
+use App\Shared\Domain\Aggregate\DomainIdInterface;
+use App\Shared\Domain\Repository\RepositoryInterface;
 
-// È una delle implementazioni possibili dell'archivio utenti
-// Per adesso mi sta bene un file; se domani ho bisogno di un DB,
-// Scrivo l'implementazione concreta di questa interfaccia che
-// insiste su un DB e inietto quella, senza dover toccare una riga
-// dellla logica applicativa 😉
-
-class FileUsersRepository implements UsersRepositoryInterface
+// Questo è un Repository.
+// Serve per caricare gli aggregati e salvarli.
+// Ha solo 2 metodi:
+// - getById() -> carica l'aggregato che ha uno specifico id
+// - save() -> salva l'aggregato
+//
+// In questa prima implementazione il repository
+// mantiene accoppiamento fra il modello di dominio,
+// ovvero l'aggregato così com'è fatto, con il modello di lettura,
+// ovvero le iste" dei dati dell'aggregato che di volta in volta
+// risultano sono interessanti per qualcuno/qualcosa all'esterno.
+//
+// Andando avanti vedremo che il modello di lettura sarà separato:
+// come rappresento e storicizzo i dati del dominio è un conto,
+// come li combino per darli all'esterno è un altro... 😉
+//
+// Questo getterà le basi per introdurre concetti quali:
+//  - ReadModel (vs WriteModel)
+//  - Projection
+//  - CQRS
+// che vedremo più avanti 👍
+//
+class FileUsersRepository implements RepositoryInterface
 {
     private string $filename;
 
-    public function __construct(string $filename)
-    {
-        $this->filename = $filename;
-    }
-
-
     /**
-     * @return Users|bool
+     * @inheritDoc
      */
-    public function readUsers(): Users|bool
+    public function getById(DomainIdInterface $id): AggregateInterface
     {
-        // Create file if not exists
+        $users = Users::create($id);
+
+        $this->filename = $id->value() . ".txt";
         if (!file_exists($this->filename)) {
-            file_put_contents($this->filename, "");
+            return $users;
         }
 
-        $users = Users::create(UsersId::random());
-        // Check if file exists before trying to read
-        if (file_exists($this->filename)) {
-            $fileContent = file($this->filename, FILE_IGNORE_NEW_LINES);
-            if ($fileContent !== false) {
-                $users->addFromStringArray($fileContent);
-            } else {
-                return false;
+        $fileContent = file($this->filename, FILE_IGNORE_NEW_LINES);
+        if ($fileContent !== false) {
+            foreach ($fileContent as $line) {
+                $users->add(new Username($line));
             }
         }
         return $users;
     }
 
-    public function writeUsers(Users $users): void
+    /**
+     * @inheritDoc
+     */
+    public function save(AggregateInterface $aggregate): void
     {
-        file_put_contents($this->filename, implode("\n", $users->toStringArray()));
+        $this->filename = $aggregate->id()->value() . ".txt";
+        if (!file_exists($this->filename)) {
+            touch($this->filename);
+        }
+
+        file_put_contents($this->filename, implode("\n", $aggregate->toStringArray()));
     }
 }
-?>

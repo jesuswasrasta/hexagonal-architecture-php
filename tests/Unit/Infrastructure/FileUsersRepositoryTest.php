@@ -2,28 +2,54 @@
 
 namespace App\Unit\Infrastructure;
 
+use App\Domain\Username;
 use App\Domain\Users;
+use App\Domain\UsersId;
 use App\Infrastructure\FileUsersRepository;
 use PHPUnit\Framework\TestCase;
 
 class FileUsersRepositoryTest extends TestCase
 {
-    private FileUsersRepository $repository;
+    private FileUsersRepository $fileUsersRepository;
+
+    protected string $filename;
+    private UsersId $usersId;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $filename = tempnam(sys_get_temp_dir(), 'FileUsersRepositoryTest');
-        file_put_contents($filename, implode("\n", ['User1', 'User2', 'User3']));
-        $this->repository = new FileUsersRepository($filename);
+        $this->fileUsersRepository = new FileUsersRepository();
+        $this->usersId = UsersId::random();
+        $this->filename = $this->usersId->value() . ".txt";
     }
 
-    public function testReadUsers(): void
+    protected function tearDown(): void
     {
-        $users = $this->repository->readUsers();
+        if (file_exists($this->filename)) {
+            unlink($this->filename);
+        }
+
+        parent::tearDown();
+    }
+
+    public function testGetByIdWithEmptyFile(): void
+    {
+        $users = $this->fileUsersRepository->getById($this->usersId);
 
         $this->assertInstanceOf(Users::class, $users);
-        $this->assertNotEmpty($users->toStringArray());
+        $this->assertEmpty($users->toStringArray());
+    }
+
+    public function testGetByIdWithPopulatedFile(): void
+    {
+        $users = Users::create($this->usersId);
+        $users->add(new Username("Giacomo Dino"));
+        $this->fileUsersRepository->save($users);
+
+        $users = $this->fileUsersRepository->getById($this->usersId);
+
+        $this->assertInstanceOf(Users::class, $users);
+        $this->assertTrue(in_array('Giacomo Dino', $users->toStringArray()));
     }
 }

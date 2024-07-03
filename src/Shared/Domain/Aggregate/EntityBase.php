@@ -9,10 +9,9 @@ namespace App\Shared\Domain\Aggregate;
 // ma ci permette di rendere esplicito il concetto.
 // Andando avanti, sapremo che ogni oggetto che eredita da EntityBase
 // è una entità, e questo ci semplificherà la vita 😊
-
 abstract class EntityBase
 {
-    protected EntityId $id;
+    protected DomainIdInterface $id;
 
-    abstract public function id(): EntityId;
+    abstract public function id(): DomainIdInterface;
 }

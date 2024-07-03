@@ -3,21 +3,26 @@ declare(strict_types=1);
 
 namespace App\Domain;
 
+use App\Shared\Domain\Aggregate\AggregateInterface;
 use App\Shared\Domain\Aggregate\AggregateRoot;
 
+
+// Un aggregato è un insieme di Entity e Value Object che concorrono a uno scopo.
+// Tra le entità che compongono l'agggregato, una viene eletta ad AggregateRoot.
+// Sarà lei che accetterà comandi dall'esterno e li smisterà alle entità interne.
+// Sarà  lei che garantirà che le invarianti di dominio siano rispettate.
+//
+// Users è una Entity.
+// Nel nostro semplicissimo caso,
+// Users basta per gestire la logica di dominio legata agli utenti.
+//
+// Users diventa quindi un Aggregate.
+// E siccome ogni Aggregate ha un AggregateRoot, è anche AggregateRoot
 /**
- * Class Users
- *
- * Represents a collection of users.
- *
- * Users diventa una `Entity`.
- * E come entità, viene eletta a `AggregateRoot` dell'aggregato `Users`.
- * Guarda i commenti nelle classi
- *
- * Guarda i commenti in @link AggregateRoot e @link EntityBase
+ * Guarda i commenti in @link AggregateRoot e @link AggregateInterface
  */
 
-class Users extends AggregateRoot implements UsersInterface
+class Users extends AggregateRoot implements AggregateInterface
 {
     /**
      * @var array<Username>
@@ -32,8 +37,8 @@ class Users extends AggregateRoot implements UsersInterface
 
     public static function create(UsersId $id): self
     {
-        $course = new self($id);
-        return $course;
+        $users = new self($id);
+        return $users;
     }
 
     public function id(): UsersId
@@ -69,30 +74,6 @@ class Users extends AggregateRoot implements UsersInterface
     }
 
     /**
-     * @param array<string> $users
-     * @return void
-     */
-    public function addFromStringArray(array $users = []): void
-    {
-        // Questo metodo che prende stringhe mi faceva comodo qui per adesso...
-        // Ma non è un metodo che dovrebbe stare in questa classe.
-        // Inoltre non c'è validazione di stringhe, è soggetto a bug.
-        // Più avanti lo toglieremo di mezzo ;)
-        foreach ($users as $user) {
-            $this->add(new Username($user));
-        }
-    }
-
-    /**
-     * @param Users $users
-     * @return void
-     */
-    public function addRange(Users $users): void
-    {
-        $this->addFromStringArray($users->toStringArray());
-    }
-
-    /**
      * Converts Username array to a string array.
      *
      * @return array<String> The array representation of the object.
@@ -103,7 +84,7 @@ class Users extends AggregateRoot implements UsersInterface
         // Ma non è un metodo che dovrebbe stare in questa classe.
         // Più avanti lo toglieremo di mezzo ;)
         return array_map(function (Username $username) {
-            return $username->__toString();
+            return $username->value();
         }, $this->users);
     }
 }

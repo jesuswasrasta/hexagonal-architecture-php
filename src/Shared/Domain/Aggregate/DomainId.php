@@ -8,8 +8,10 @@ use Ramsey\Uuid\Uuid as RamseyUuid;
 use Stringable;
 
 // Classe base per rinforzare il concetto di id delle entità
-// Per ora andiamo easy, usiamo una stringa non vuota
-abstract class EntityId implements Stringable
+// (compresi aggregati e aggregate root)
+//
+// Uso Uuid per comodità e per abitudine 😉
+abstract class DomainId implements DomainIdInterface,Stringable
 {
     final public function __construct(protected string $value)
     {

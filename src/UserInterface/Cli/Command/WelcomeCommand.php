@@ -5,7 +5,6 @@ namespace App\UserInterface\Cli\Command;
 
 use App\Application\WelcomeService;
 use App\Infrastructure\FileUsersRepository;
-use App\Infrastructure\JsonUsersRepository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -32,12 +31,17 @@ final class WelcomeCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         //Leggo l'argomento passato, il nome dell'utente
+        /** @var string $name */
         $name = $input->getArgument('name');
 
         //Eseguo l'azione
-        //$usersRepository = new FileUsersRepository("Users.txt");
+        $usersRepository = new FileUsersRepository();
+
+
         // 🆕 Usiamo un Json!
-        $usersRepository = new JsonUsersRepository("Users.json");
+        //$usersRepository = new JsonUsersRepository("Users.json");
+
+
 
         $welcomeService = new WelcomeService($usersRepository);
         $msg = $welcomeService->welcomeUser($name);

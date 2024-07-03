@@ -3,44 +3,43 @@ declare(strict_types=1);
 
 namespace App\Infrastructure;
 
-use App\Application\UsersRepositoryInterface;
+use App\Domain\Username;
 use App\Domain\Users;
-use App\Domain\UsersId;
+use App\Shared\Domain\Aggregate\AggregateInterface;
+use App\Shared\Domain\Aggregate\DomainIdInterface;
+use App\Shared\Domain\Repository\RepositoryInterface;
 
-class JsonUsersRepository implements UsersRepositoryInterface
+class JsonUsersRepository implements RepositoryInterface
 {
     private string $filename;
 
-    public function __construct(string $filename)
-    {
-        $this->filename = $filename;
-    }
-
     /**
-     * Reads the users from the file.
+     * Retrieves an aggregate by its ID from a JSON file.
      *
-     * If the file does not exist, it will create an empty file.
-     * Reads the contents of the file and parses it into an array.
-     * If the file content is not valid JSON, it throws a JsonUsersRepositoryException.
+     * @param DomainIdInterface $id The ID of the aggregate to retrieve.
      *
-     * @return Users|bool The users array if the file exists and contains valid JSON data,
-     *                   otherwise false if there was an error reading the file.
-     * @throws JsonUsersRepositoryException If the file contains invalid JSON data.
+     * @return AggregateInterface The retrieved aggregate.
+     *
+     * @throws JsonUsersRepositoryException If the JSON file contains invalid data or the file cannot be read.
      */
-    public function readUsers(): Users|bool
+    public function getById(DomainIdInterface $id): AggregateInterface
     {
-        // Create file if not exists
-        if (!file_exists($this->filename)) {
-            file_put_contents($this->filename, "[]");
-        }
+        /** @var Users $users */
+        $users = Users::create($id);
 
-        $users = Users::create(UsersId::random());
+        $this->filename = $id->value() . ".json";
+        if (!file_exists($this->filename)) {
+            return $users;
+        }
 
         $fileContent = file_get_contents($this->filename);
         if ($fileContent !== false) {
             $usersJson = json_decode($fileContent, true);
             if (json_last_error() === JSON_ERROR_NONE && is_array($usersJson)) {
-                $users->addFromStringArray($usersJson);
+                foreach ($usersJson as $username)
+                {
+                    $users->add(new Username($username));
+                }
             } else {
                 throw new JsonUsersRepositoryException($this->filename, 'Invalid JSON data in file: ' . json_last_error_msg());
             }
@@ -48,19 +47,19 @@ class JsonUsersRepository implements UsersRepositoryInterface
             throw new JsonUsersRepositoryException($this->filename, 'Failed to read file contents');
         }
 
-        return $users;
-    }
+        return $users;    }
 
     /**
-     * Writes users data to a JSON file.
+     * Saves the aggregate to a JSON file.
      *
-     * @param Users $users An array containing the users' data.
+     * @param AggregateInterface $aggregate The aggregate to be saved.
      *
      * @throws JsonUsersRepositoryException If there is an error encoding the data to JSON format.
      */
-    public function writeUsers(Users $users): void
+    public function save(AggregateInterface $aggregate): void
     {
-        $jsonData = json_encode($users->toStringArray(), JSON_PRETTY_PRINT);
+        $this->filename = $aggregate->id()->value() . ".json";
+        $jsonData = json_encode($aggregate->toStringArray(), JSON_PRETTY_PRINT);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
             throw new JsonUsersRepositoryException($this->filename, 'Error encoding data to JSON format: ' . json_last_error_msg());
