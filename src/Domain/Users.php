@@ -36,14 +36,14 @@ class Users extends AggregateRoot implements AggregateInterface
      * @param Username $username The username of the user to add.
      * @return ResultInterface The result of the operation.
      */
-    public function add(Username $username): ResultInterface
+    public function add(Username $username, SubscriptionDate $subDate): ResultInterface
     {
         if ($this->exists($username)) {
             return new UserAlreadyPresent($username);
-        } else {
-            $this->users[] = $username;
-            return new UserAdded($username);
         }
+        $this->users[] = [$username, $subDate];
+        return new UserAdded($username);
+
     }
 
     /**
@@ -76,7 +76,12 @@ class Users extends AggregateRoot implements AggregateInterface
      */
     private function exists(Username $username): bool
     {
-        return in_array($username, $this->users);
+        foreach ($this->users as $k => $v){
+            if($v[0]->value() == $username->value()){
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -86,11 +91,8 @@ class Users extends AggregateRoot implements AggregateInterface
      */
     public function toStringArray(): array
     {
-        // Questo metodo che restituisce stringhe mi faceva comodo qui per adesso...
-        // Ma non è un metodo che dovrebbe stare in questa classe.
-        // Più avanti lo toglieremo di mezzo ;)
-        return array_map(function (Username $username) {
-            return $username->value();
+        return array_map(function (array $values) {
+            return $values[0]->value().' => '.$values[1]->value()->format('Y-m-d H:i:s');
         }, $this->users);
     }
 }

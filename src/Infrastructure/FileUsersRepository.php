@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Infrastructure;
 
 use App\Application\UsersRepositoryInterface;
+use App\Domain\SubscriptionDate;
 use App\Domain\Username;
 use App\Domain\Users;
 use App\Shared\Domain\Aggregate\AggregateInterface;
@@ -38,6 +39,7 @@ class FileUsersRepository implements RepositoryInterface
 
     /**
      * @inheritDoc
+     * @throws \Exception
      */
     public function getById(DomainIdInterface $id): AggregateInterface
     {
@@ -51,7 +53,7 @@ class FileUsersRepository implements RepositoryInterface
         $fileContent = file($this->filename, FILE_IGNORE_NEW_LINES);
         if ($fileContent !== false) {
             foreach ($fileContent as $line) {
-                $users->add(new Username($line));
+                $users->add(new Username(explode(" => ", $line)[0]), new SubscriptionDate(new \DateTime(explode(" => ", $line)[1])));
             }
         }
         return $users;

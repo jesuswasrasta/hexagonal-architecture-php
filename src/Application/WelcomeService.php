@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Application;
 
+use App\Domain\SubscriptionDate;
 use App\Domain\UserAdded;
 use App\Domain\UserAlreadyPresent;
 use App\Domain\Username;
@@ -45,7 +46,8 @@ class WelcomeService
         $users = $this->usersRepository->getById($domainId);
 
         $username = new Username($user);
-        $result = $users->add($username);
+        $subDate = new SubscriptionDate(new \DateTime());
+        $result = $users->add($username,$subDate);
 
         if ($result instanceof UserAdded) {
             $this->usersRepository->save($users);
