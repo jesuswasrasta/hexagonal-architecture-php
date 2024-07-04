@@ -1,0 +1,8 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="app:welcome" type="ComposerRunConfigurationType" factoryName="Composer Script">
+    <option name="commandLineParameters" value="Mario Rossi" />
+    <option name="pathToComposerJson" value="$PROJECT_DIR$/composer.json" />
+    <option name="script" value="app:welcome" />
+    <method v="2" />
+  </configuration>
+</component>
