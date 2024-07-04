@@ -6,22 +6,6 @@ namespace App\Domain;
 use App\Shared\Domain\Aggregate\AggregateInterface;
 use App\Shared\Domain\Aggregate\AggregateRoot;
 
-
-// Un aggregato è un insieme di Entity e Value Object che concorrono a uno scopo.
-// Tra le entità che compongono l'agggregato, una viene eletta ad AggregateRoot.
-// Sarà lei che accetterà comandi dall'esterno e li smisterà alle entità interne.
-// Sarà  lei che garantirà che le invarianti di dominio siano rispettate.
-//
-// Users è una Entity.
-// Nel nostro semplicissimo caso,
-// Users basta per gestire la logica di dominio legata agli utenti.
-//
-// Users diventa quindi un Aggregate.
-// E siccome ogni Aggregate ha un AggregateRoot, è anche AggregateRoot
-/**
- * Guarda i commenti in @link AggregateRoot e @link AggregateInterface
- */
-
 class Users extends AggregateRoot implements AggregateInterface
 {
     /**
@@ -63,6 +47,28 @@ class Users extends AggregateRoot implements AggregateInterface
     }
 
     /**
+     * Removes a user from the collection if it exist.
+     *
+     * @param Username $username The username of the user to remove.
+     * @return ResultInterface The result of the operation.
+     */
+    public function remove(Username $username): ResultInterface
+    {
+        if (!$this->exists($username)) {
+            return new UserNotFound($username);
+        }
+
+        foreach($this->users as $ind=>$user){
+            if($user->equals($username)){
+                unset($this->users[$ind]);
+            }
+        }
+
+        return new UserRemoved($username);
+
+    }
+
+    /**
      * Check if a username exists in the users array.
      *
      * @param Username $username The username to check
@@ -88,4 +94,3 @@ class Users extends AggregateRoot implements AggregateInterface
         }, $this->users);
     }
 }
-
