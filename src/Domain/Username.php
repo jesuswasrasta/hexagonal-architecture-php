@@ -39,7 +39,8 @@ final class Username extends ValueObject
 
     public function __construct(string $username)
     {
-        // Qui aggiungeremo altre regole di dominio, come la lunghezza massima, i caratteri accettabili, ecc.
+        // Qui aggiungeremo altre regole di dominio,
+        // come la lunghezza massima, i caratteri accettabili, ecc.
         // Per ora ci accontentiamo di questa regola.
         if (empty($username)) {
             throw new InvalidArgumentException('The username cannot be empty');
@@ -48,17 +49,12 @@ final class Username extends ValueObject
         $this->username = $username;
     }
 
-    public function getUsername(): string
-    {
-        return $this->username;
-    }
-
     // Molto importante ricordarsi di implementare il metodo `equals()`!
     // I Value Object sono uguali dal momento che tutte le loro proprietà sono uguali.
     // Dobbiamo essere sicuri che due oggetti Username siano uguali se il loro username è uguale.
     public function equals(Username $username): bool
     {
-        return $this->username === $username->getUsername();
+        return $this->username === $username->username;
     }
 
     public function __toString(): string
