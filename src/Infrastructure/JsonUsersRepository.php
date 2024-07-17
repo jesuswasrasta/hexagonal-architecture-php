@@ -13,6 +13,7 @@ use App\Shared\Domain\Repository\RepositoryInterface;
 class JsonUsersRepository implements RepositoryInterface
 {
     private string $filename;
+    private string $delimiter = '=>'; // delimiter string
 
     /**
      * Retrieves an aggregate by its ID from a JSON file.
@@ -37,9 +38,10 @@ class JsonUsersRepository implements RepositoryInterface
         if ($fileContent !== false) {
             $usersJson = json_decode($fileContent, true);
             if (json_last_error() === JSON_ERROR_NONE && is_array($usersJson)) {
-                foreach ($usersJson as $username)
+                foreach ($usersJson as $userJson)
                 {
-                    $users->add(new Username($username));
+                    $user = explode($this->delimiter, $userJson);
+                    $users->add(new Username(trim($user[0])), new SubscriptionDate(new \DateTime($user[1])));
                 }
             } else {
                 throw new JsonUsersRepositoryException($this->filename, 'Invalid JSON data in file: ' . json_last_error_msg());
@@ -48,7 +50,8 @@ class JsonUsersRepository implements RepositoryInterface
             throw new JsonUsersRepositoryException($this->filename, 'Failed to read file contents');
         }
 
-        return $users;    }
+        return $users;
+    }
 
     /**
      * Saves the aggregate to a JSON file.

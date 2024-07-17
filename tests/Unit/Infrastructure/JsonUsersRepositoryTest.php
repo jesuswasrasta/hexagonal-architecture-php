@@ -1,10 +1,12 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Unit\Infrastructure;
 
-use App\Domain\Username;
-use App\Domain\Users;
-use App\Domain\UsersId;
+use App\Domain\Users\SubscriptionDate;
+use App\Domain\Users\Username;
+use App\Domain\Users\Users;
+use App\Domain\Users\UsersId;
 use App\Infrastructure\JsonUsersRepository;
 use PHPUnit\Framework\TestCase;
 
@@ -53,7 +55,7 @@ class JsonUsersRepositoryTest extends TestCase
     public function testGetByIdWithValidJsonFile(): void
     {
         $users = Users::create($this->usersId);
-        $users->add(new Username("Giacomo Dino"));
+        $users->add(new Username("Giacomo Dino"), new SubscriptionDate(new \DateTime("2024-07-17")));
         $this->jsonUsersRepository->save($users);
 
         $result = $this->jsonUsersRepository->getById($this->usersId);

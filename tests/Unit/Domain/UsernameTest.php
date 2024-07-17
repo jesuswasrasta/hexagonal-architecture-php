@@ -3,16 +3,16 @@ declare(strict_types=1);
 
 namespace App\Unit\Domain;
 
-use App\Domain\Username;
+use App\Domain\Users\Username;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \App\Domain\Username
+ * @covers \App\Domain\Users\Username
  */
 final class UsernameTest extends TestCase
 {
     /**
-     * @covers \App\Domain\Username::equals
+     * @covers \App\Domain\Users\Username::equals
      */
     public function testEqualsSuccess()
     {
@@ -22,7 +22,7 @@ final class UsernameTest extends TestCase
     }
 
     /**
-     * @covers \App\Domain\Username::equals
+     * @covers \App\Domain\Users\Username::equals
      */
     public function testEqualsFail()
     {
