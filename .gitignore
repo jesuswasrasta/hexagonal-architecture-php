@@ -179,6 +179,9 @@ fabric.properties
 # https://plugins.jetbrains.com/plugin/8053-azure-toolkit-for-intellij
 .idea/**/azureSettings.xml
 
+# Conventional Commit Plugin
+.idea/conventionalCommit.xml
+
 ### PHPUnit ###
 # Covers PHPUnit
 # Reference: https://phpunit.de/
