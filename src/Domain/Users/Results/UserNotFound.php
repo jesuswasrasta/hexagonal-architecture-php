@@ -1,9 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Domain;
+namespace App\Domain\Users\Results;
 
-class UserRemoved implements ResultInterface
+use App\Domain\Users\Username;
+
+class UserNotFound implements ResultInterface
 {
     private Username $username;
 
@@ -14,6 +16,6 @@ class UserRemoved implements ResultInterface
 
     public function getMessage(): string
     {
-        return "User '{$this->username}' has been removed successfully.";
+        return "Unable to remove. User '{$this->username}' not found.";
     }
 }

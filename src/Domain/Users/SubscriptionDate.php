@@ -1,12 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Domain;
+namespace App\Domain\Users;
 
 use App\Shared\Domain\ValueObject\ValueObject;
 use InvalidArgumentException;
-use function PHPUnit\Framework\greaterThan;
-use function PHPUnit\Framework\lessThan;
 
 final class SubscriptionDate extends ValueObject
 {

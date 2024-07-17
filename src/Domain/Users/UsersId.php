@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Domain;
+namespace App\Domain\Users;
 
 use App\Shared\Domain\Aggregate\DomainId;
 

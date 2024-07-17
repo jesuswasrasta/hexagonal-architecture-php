@@ -3,10 +3,9 @@ declare(strict_types=1);
 
 namespace App\Infrastructure;
 
-use App\Application\UsersRepositoryInterface;
-use App\Domain\SubscriptionDate;
-use App\Domain\Username;
-use App\Domain\Users;
+use App\Domain\Users\SubscriptionDate;
+use App\Domain\Users\Username;
+use App\Domain\Users\Users;
 use App\Shared\Domain\Aggregate\AggregateInterface;
 use App\Shared\Domain\Aggregate\DomainIdInterface;
 use App\Shared\Domain\Repository\RepositoryInterface;

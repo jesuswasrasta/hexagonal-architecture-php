@@ -3,11 +3,11 @@ declare(strict_types=1);
 
 namespace App\Application;
 
-use App\Domain\SubscriptionDate;
-use App\Domain\UserAdded;
-use App\Domain\UserAlreadyPresent;
-use App\Domain\Username;
-use App\Domain\UsersId;
+use App\Domain\Users\Results\UserAdded;
+use App\Domain\Users\Results\UserAlreadyPresent;
+use App\Domain\Users\SubscriptionDate;
+use App\Domain\Users\Username;
+use App\Domain\Users\UsersId;
 use App\Shared\Domain\Repository\RepositoryInterface;
 
 class WelcomeService

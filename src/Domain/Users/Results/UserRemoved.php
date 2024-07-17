@@ -1,9 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Domain;
+namespace App\Domain\Users\Results;
 
-class UserAlreadyPresent implements \App\Domain\ResultInterface
+use App\Domain\Users\Username;
+
+class UserRemoved implements ResultInterface
 {
     private Username $username;
 
@@ -14,6 +16,6 @@ class UserAlreadyPresent implements \App\Domain\ResultInterface
 
     public function getMessage(): string
     {
-        return "Unable to add. User '{$this->username}' is already present.";
+        return "User '{$this->username}' has been removed successfully.";
     }
 }

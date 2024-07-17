@@ -1,9 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Domain;
+namespace App\Domain\Users\Results;
 
-class UserAdded implements ResultInterface
+use App\Domain\Users\Username;
+
+class UserAlreadyPresent implements ResultInterface
 {
     private Username $username;
 
@@ -14,6 +16,6 @@ class UserAdded implements ResultInterface
 
     public function getMessage(): string
     {
-        return "User '{$this->username}' has been added successfully.";
+        return "Unable to add. User '{$this->username}' is already present.";
     }
 }

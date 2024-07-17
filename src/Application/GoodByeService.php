@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace App\Application;
 
-use App\Domain\UserRemoved;
-use App\Domain\UserNotFound;
-use App\Domain\Username;
-use App\Domain\UsersId;
+use App\Domain\Users\Results\UserNotFound;
+use App\Domain\Users\Results\UserRemoved;
+use App\Domain\Users\Username;
+use App\Domain\Users\UsersId;
 use App\Shared\Domain\Repository\RepositoryInterface;
 
 class GoodByeService
