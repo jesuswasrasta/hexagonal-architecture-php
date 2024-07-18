@@ -7,6 +7,7 @@ use App\Domain\Users\Results\UserAdded;
 use App\Domain\Users\Results\UserAlreadyPresent;
 use App\Domain\Users\SubscriptionDate;
 use App\Domain\Users\Username;
+use App\Domain\Users\Users;
 use App\Domain\Users\UsersId;
 use App\Shared\Domain\Repository\RepositoryInterface;
 
@@ -43,6 +44,7 @@ class WelcomeService
         //
         // A tendere avremo un WriteModel separato dal ReadModel! 🤯
         $domainId = new UsersId("d9208ab6-6402-49e9-a61d-111111111111");
+        /** @var Users $users */
         $users = $this->usersRepository->getById($domainId);
 
         $username = new Username($user);
