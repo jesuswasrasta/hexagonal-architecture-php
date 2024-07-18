@@ -62,7 +62,7 @@ class Users extends AggregateRoot implements AggregateInterface
         }
 
         foreach($this->users as $ind=>$user){
-            if($user->equals($username)){
+            if($user[0]->equals($username)){
                 unset($this->users[$ind]);
             }
         }
