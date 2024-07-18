@@ -13,7 +13,7 @@
         "bin-dir": "bin"
     },
     "require": {
-        "php": ">=8.3.0",
+        "php": ">=8.1.0",
         "ext-mbstring": "*",
         "symfony/dependency-injection": "^6.0",
         "symfony/console": "^6.0",
