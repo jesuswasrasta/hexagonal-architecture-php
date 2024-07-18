@@ -27,4 +27,9 @@ final class SubscriptionDate extends ValueObject
     {
         return $this->subDate;
     }
+
+    public function getYearMonth(): string
+    {
+        return $this->subDate->format('Y-m');
+    }
 }

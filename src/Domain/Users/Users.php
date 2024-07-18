@@ -6,6 +6,7 @@ namespace App\Domain\Users;
 use App\Domain\Users\Results\ResultInterface;
 use App\Domain\Users\Results\UserAdded;
 use App\Domain\Users\Results\UserAlreadyPresent;
+use App\Domain\Users\Results\UserList;
 use App\Domain\Users\Results\UserNotFound;
 use App\Domain\Users\Results\UserRemoved;
 use App\Shared\Domain\Aggregate\AggregateInterface;
@@ -70,6 +71,24 @@ class Users extends AggregateRoot implements AggregateInterface
         return new UserRemoved($username);
     }
 
+    public function listUserBySubscriptionDate(SubscriptionDate $subDate): ResultInterface
+    {
+        $res = [];
+
+        //ciclare utenti
+        foreach($this->users as $ind=>$user){
+
+            //filtra per mese/anno
+            if($user[1]->getYearMonth() === $subDate->getYearMonth()){
+                $res[] = [$user[0]->value(), $user[1]->value()] ;
+            }
+
+        }
+
+        //return elenco utenti + data
+        return new UserList($res);
+
+    }
     /**
      * Check if a username exists in the users array.
      *
