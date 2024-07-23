@@ -12,7 +12,7 @@ namespace App\Shared\Domain\ValueObject;
 // è una Value Object, e questo ci semplificherà la vita 😊
 abstract class ValueObject
 {
-    protected string $value;
+    protected mixed $value;
 
     // Possiamo usare questo generico metodo per ottenere il valore di un VO.
     // Sarà spesso una rappresentazione testuale, un JSON, etc.
