@@ -6,11 +6,10 @@ use App\Shared\Domain\ValueObject\ValueObject;
 
 class ServiceStatus extends ValueObject
 {
-    private StatiServizio $status;
 
-    public function __construct()
+
+    public function __construct(private readonly StatiServizio $status = StatiServizio::Disattivo)
     {
-        $this->status = StatiServizio::Disattivo;
     }
 
     public function value(): StatiServizio
@@ -21,4 +20,6 @@ class ServiceStatus extends ValueObject
     {
         return $this->status === $status->status;
     }
+
+
 }
