@@ -16,7 +16,7 @@ namespace App\Shared\Domain\Aggregate;
 // rinforza le invarianti di dominio.
 // Ogni comando che modifica l'aggregato deve passare per l'AR.
 // È il 'rappresentante sindacale' dell'aggregato 😁
-abstract class AggregateRoot
+abstract class AggregateRoot implements AggregateInterface
 {
     protected DomainIdInterface $id;
 
