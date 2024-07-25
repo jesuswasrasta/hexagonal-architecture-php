@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Users\Results;
 
-use App\Domain\Users\Username;
+use App\Shared\Domain\Aggregate\ResultInterface;
 
 class UserList implements ResultInterface
 {

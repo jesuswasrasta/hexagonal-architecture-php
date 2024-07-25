@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure;
 
-use App\Application\ServizioCatalogoService;
+use App\Application\CatalogoServiziService;
 use App\Domain\Services\CatalogoServizi;
 use App\Domain\Services\DescrizioneServizio;
 use App\Domain\Services\IdServizio;
@@ -45,7 +45,8 @@ class JsonServizioRepository implements RepositoryInterface
             $serviziJson = json_decode($fileContent, true);
             if (json_last_error() === JSON_ERROR_NONE && is_array($serviziJson)) {
                 foreach ($serviziJson as $servizioJson){
-                    $servizio = explode($this->delimiter, $servizioJson);
+                    $servizio = $servizioJson;
+                    //var_dump($this->delimiter, $servizioJson);
                     $id = new IdServizio($servizio[0]);
                     $titolo = new TitoloServizio($servizio[1]);
                     $desc = new DescrizioneServizio($servizio[2]);
@@ -74,12 +75,16 @@ class JsonServizioRepository implements RepositoryInterface
     public function save(AggregateInterface $aggregate): void
     {
         $this->filename = $aggregate->id()->value() . ".json";
-        $jsonData = json_encode($aggregate->toStringArray(), JSON_PRETTY_PRINT);
-
+        if (!file_exists($this->filename)) {
+            touch($this->filename);
+        }
+        if(!($aggregate instanceof CatalogoServizi)){
+            throw new JsonRepositoryException($this->filename, 'Error instance');
+        }
+        $jsonData = json_encode($aggregate->getAllServizi(), JSON_PRETTY_PRINT);
         if (json_last_error() !== JSON_ERROR_NONE) {
             throw new JsonRepositoryException($this->filename, 'Error encoding data to JSON format: ' . json_last_error_msg());
         }
-
         file_put_contents($this->filename, $jsonData);
     }
 }

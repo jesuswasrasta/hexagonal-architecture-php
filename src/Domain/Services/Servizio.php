@@ -18,16 +18,12 @@ class Servizio extends EntityBase
     {
         return $this->id;
     }
-
     public function getStatus(): ServiceStatus
     {
         return $this->status;
     }
-
-    public function toStringArray(): array
+    public function getDto(): array
     {
-        return array_map(function (array $values) {
-            return $values[0]->value().' => '.$values[1]->value().' => '.$values[2]->value().' => '.$values[3]->value();
-        }, $this->servizio);
+        return [$this->id->value(), $this->titolo->value(), $this->descrizione->value(), $this->status->value()];
     }
 }

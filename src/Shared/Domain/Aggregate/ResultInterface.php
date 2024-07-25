@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Domain\Users\Results;
+namespace App\Shared\Domain\Aggregate;
 
 interface ResultInterface
 {

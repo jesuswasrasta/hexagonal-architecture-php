@@ -3,9 +3,10 @@ declare(strict_types=1);
 
 namespace App\UserInterface\Cli\Command;
 
-use App\Application\ServizioCatalogoService;
+use App\Application\CatalogoServiziService;
 use App\Application\WelcomeService;
 use App\Infrastructure\FileUsersRepository;
+use App\Infrastructure\JsonServizioRepository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -33,8 +34,11 @@ final class CatalogoServiziCommand extends Command
         $titolo = $input->getArgument('titolo');
         $descrizione = $input->getArgument('descrizione');
 
-        $servizio = new ServizioCatalogoService();
-        $servizio->aggiungiServizio($titolo,$descrizione);
+        $repository = new JsonServizioRepository();
+
+        $servizio = new CatalogoServiziService($repository);
+        $msg = $servizio->aggiungiServizio($titolo,$descrizione);
+        $output->writeln($msg);
 
         return self::SUCCESS;
     }

@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Domain\Users;
 
-use App\Domain\Users\Results\ResultInterface;
 use App\Domain\Users\Results\UserAdded;
 use App\Domain\Users\Results\UserAlreadyPresent;
 use App\Domain\Users\Results\UserList;
@@ -11,6 +10,7 @@ use App\Domain\Users\Results\UserNotFound;
 use App\Domain\Users\Results\UserRemoved;
 use App\Shared\Domain\Aggregate\AggregateInterface;
 use App\Shared\Domain\Aggregate\AggregateRoot;
+use App\Shared\Domain\Aggregate\ResultInterface;
 
 class Users extends AggregateRoot implements AggregateInterface
 {

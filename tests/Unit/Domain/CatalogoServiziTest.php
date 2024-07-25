@@ -2,6 +2,7 @@
 
 namespace App\Unit\Domain;
 
+use App\Domain\Services\CatalogoServiziId;
 use App\Domain\Services\IdServizio;
 use App\Domain\Services\ServiceStatus;
 use App\Domain\Services\Servizio;
@@ -16,11 +17,11 @@ class CatalogoServiziTest extends TestCase
 
     public function testQuandoAggiungoUnServizioLoStessoEDisabilitato(): void
     {
-        $catalogoServizi = new CatalogoServizi();
+        $catalogoServizi = CatalogoServizi::create(CatalogoServiziId::random());
         $id = new IdServizio(IdServizio::random());
         $titolo = new TitoloServizio('titol-o');
         $desc = new DescrizioneServizio('-');
-        $servizio = new Servizio($id,$titolo,$desc);
+        $servizio = new Servizio($id,$titolo,$desc,new ServiceStatus());
         $catalogoServizi->addServizio($servizio);
         $servizioCorrente = $catalogoServizi->getServizio($servizio->id());
         $this->assertEquals($servizioCorrente->getStatus(), new ServiceStatus());
@@ -31,17 +32,17 @@ class CatalogoServiziTest extends TestCase
         $id = new IdServizio(IdServizio::random());
         $titolo = new TitoloServizio('titol-o');
         $desc = new DescrizioneServizio('-');
-        $servizio = new Servizio($id,$titolo,$desc);
+        $servizio = new Servizio($id,$titolo,$desc,new ServiceStatus());
         $this->assertNotNull($servizio->id());
     }
 
     public function testAddServizio(): void
     {
-        $catalogoServizi = new CatalogoServizi();
+        $catalogoServizi = CatalogoServizi::create(CatalogoServiziId::random());
         $id = new IdServizio(IdServizio::random());
         $titolo = new TitoloServizio('titol-o');
         $desc = new DescrizioneServizio('-');
-        $servizio = new Servizio($id,$titolo,$desc);
+        $servizio = new Servizio($id,$titolo,$desc,new ServiceStatus());
         $catalogoServizi->addServizio($servizio);
         $this->assertNotNull($catalogoServizi->getServizio($servizio->id()));
     }
@@ -51,7 +52,7 @@ class CatalogoServiziTest extends TestCase
         $id = new IdServizio(IdServizio::random());
         $titolo = new TitoloServizio('titol-o');
         $desc = new DescrizioneServizio('-');
-        $servizio = new Servizio($id,$titolo,$desc);
+        $servizio = new Servizio($id,$titolo,$desc,new ServiceStatus());
         $this->assertNotNull($servizio->getStatus());
     }
 
@@ -95,5 +96,6 @@ class CatalogoServiziTest extends TestCase
             $this->assertEquals('Invalid kebab-case string.', $e->getMessage());
         }
     }
+
 
 }
