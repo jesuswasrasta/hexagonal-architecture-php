@@ -2,14 +2,16 @@
 
 A simple PHP app to explain hexagonal architecture, DDD, and other common design principles.
 
-Miro board: https://miro.com/app/board/uXjVK5myd74=/
+DeepWiki: [https://deepwiki.com/jesuswasrasta/hexagonal-architecture-php/](https://deepwiki.com/jesuswasrasta/hexagonal-architecture-php/)
+
+Miro board: [https://miro.com/app/board/uXjVK5myd74=/](https://miro.com/app/board/uXjVInYuW-4=/) (private)
 
 ## CLI project skeleton
-Thi CLI project skeleton tempts to require the least amount of code needed to write a command line interface project
-based on [Symfony Console](https://symfony.com/doc/current/components/console.html).
+This is CLI project skeleton based on [Symfony Console](https://symfony.com/doc/current/components/console.html).  
+It attempts to require the least amount of code needed to write a command line interface.
 
-The folder structure follow a simple Domain Driven Design application structure by suggesting splitting Application,
-Domain, UserInterface, and Infrastructure responsibilities.
+The folder structure follow a simple Domain Driven Design application structure.  
+It enforces splitting Application, Domain, UserInterface, and Infrastructure responsibilities.
 
 The minimum of features that is needed for developing CLI applications is included:
 
