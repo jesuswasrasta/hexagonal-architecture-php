@@ -1,0 +1,32 @@
+# ABOUTME: Docker Compose configuration for PHP development environment
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: hexagonal-php
+    volumes:
+      # Mount project directory
+      - .:/app
+      # Cache composer dependencies to avoid re-downloading
+      - composer-cache:/home/developer/.composer
+    working_dir: /app
+    # Keep container running for PHPStorm integration
+    tty: true
+    stdin_open: true
+    environment:
+      # Set PHP configuration
+      - PHP_IDE_CONFIG=serverName=hexagonal-php
+      # Xdebug configuration
+      - XDEBUG_MODE=debug,coverage
+    extra_hosts:
+      # Allow Xdebug to connect back to host
+      - "host.docker.internal:host-gateway"
+    # Expose Xdebug port
+    ports:
+      - "9003:9003"
+
+volumes:
+  composer-cache:
+    driver: local

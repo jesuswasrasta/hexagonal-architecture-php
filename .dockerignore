@@ -1,0 +1,38 @@
+# Version control
+.git
+.gitignore
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+*~
+
+# Dependencies (will be installed in container)
+vendor/
+composer.lock
+
+# Test artifacts
+.phpunit.result.cache
+.coverage-cache/
+tests/_output/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Docker files themselves
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Documentation
+README.md
+*.md
+
+# PHPStan cache
+.phpstan/
