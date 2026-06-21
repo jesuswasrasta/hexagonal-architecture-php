@@ -21,7 +21,7 @@ class JsonRepositoryException extends Exception
      * @param int $code
      * @param Throwable|null $previous
      */
-    public function __construct(string $jsonFile, $message = "", $code = 0, Throwable $previous = null)
+    public function __construct(string $jsonFile, string $message = "", int $code = 0, ?Throwable $previous = null)
     {
         // Call the parent constructor
         parent::__construct($message, $code, $previous);
