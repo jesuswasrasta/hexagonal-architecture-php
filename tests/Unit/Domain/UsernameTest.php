@@ -4,16 +4,12 @@ declare(strict_types=1);
 namespace App\Unit\Domain;
 
 use App\Domain\Users\Username;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \App\Domain\Users\Username
- */
+#[CoversClass(\App\Domain\Users\Username::class)]
 final class UsernameTest extends TestCase
 {
-    /**
-     * @covers \App\Domain\Users\Username::equals
-     */
     public function testEqualsSuccess()
     {
         $username = new Username('sameUsername');
@@ -21,9 +17,6 @@ final class UsernameTest extends TestCase
         $this->assertTrue($username->equals($anotherUsername));
     }
 
-    /**
-     * @covers \App\Domain\Users\Username::equals
-     */
     public function testEqualsFail()
     {
         $username = new Username('oneUsername');

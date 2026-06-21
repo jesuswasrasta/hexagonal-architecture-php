@@ -8,11 +8,10 @@ use App\Domain\Users\Username;
 use App\Domain\Users\Users;
 use App\Domain\Users\UsersId;
 use App\Infrastructure\JsonUsersRepository;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @coversDefaultClass \App\Infrastructure\JsonUsersRepository
- */
+#[CoversClass(\App\Infrastructure\JsonUsersRepository::class)]
 class JsonUsersRepositoryTest extends TestCase
 {
     private JsonUsersRepository $jsonUsersRepository;
@@ -38,9 +37,6 @@ class JsonUsersRepositoryTest extends TestCase
         parent::tearDown();
     }
 
-    /**
-     * @covers ::getById
-     */
     public function testGetByIdWhenFileDoesNotExist(): void
     {
         $users = $this->jsonUsersRepository->getById($this->usersId);
@@ -49,9 +45,6 @@ class JsonUsersRepositoryTest extends TestCase
         $this->assertEmpty($users->toStringArray());
     }
 
-    /**
-     * @covers ::getById
-     */
     public function testGetByIdWithValidJsonFile(): void
     {
         $users = Users::create($this->usersId);

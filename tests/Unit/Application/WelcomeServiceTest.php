@@ -5,9 +5,11 @@ namespace App\Unit\Application;
 use App\Application\WelcomeService;
 use App\Domain\Users\SubscriptionDate;
 use App\Domain\Users\Username;
+use App\Domain\Users\Users;
 use App\Domain\Users\UsersId;
 use App\Infrastructure\FileUsersRepository;
 use DateTime;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -36,16 +38,11 @@ class WelcomeServiceTest extends TestCase
     protected function tearDown(): void
     {
         $this->deleteFile($this->filename);
+        $this->deleteFile("d9208ab6-6402-49e9-a61d-111111111111.txt");
         parent::tearDown();
     }
 
-    /**
-     * Test welcomeUser method when adding a new user
-     * @test
-     *
-     * This test case checks if the 'welcomeUser()' method creates a new user,
-     * saves the user to repository and returns a welcome message for new user.
-     */
+    #[Test]
     public function it_welcomes_and_adds_new_user(): void
     {
         // Uso di proposito un FileUsersRepository e non un mock
@@ -60,22 +57,21 @@ class WelcomeServiceTest extends TestCase
         $this->assertEquals("Welcome, " . $username . "!", $service->welcomeUser($username));
     }
 
-    /**
-     * Test that the existing user is welcomed correctly.
-     *
-     * @return void
-     */
+    #[Test]
     public function it_welcomes_existing_user(): void
     {
-        // Uso di proposito un FileUsersRepository e non un mock
+        // Uso di proposito un FileUsersRepository e non un mock)
+        // WelcomeService usa internamente un UsersId hardcoded (d9208...),
+        // quindi dobbiamo pre-popolare quel file.
 
-        $users = $this->fileUsersRepository->getById($this->usersId);
-        $username = new Username("Lampa Dario");
-        $subDate = new SubscriptionDate(new DateTime());
-        $users->add($username, $subDate);
+        $hardcodedId = new UsersId("d9208ab6-6402-49e9-a61d-111111111111");
+        $users = Users::create($hardcodedId);
+        $usernameString = "Lampa Dario";
+        $users->add(new Username($usernameString), new SubscriptionDate(new DateTime()));
         $this->fileUsersRepository->save($users);
+
         $service = new WelcomeService($this->fileUsersRepository);
-        $this->assertEquals("Welcome back, " . $username . "!", $service->welcomeUser($username));
+        $this->assertEquals("Welcome back, " . $usernameString . "!", $service->welcomeUser($usernameString));
     }
 
 
