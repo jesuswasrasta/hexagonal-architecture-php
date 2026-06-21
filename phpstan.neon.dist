@@ -4,13 +4,9 @@ parameters:
   paths:
     - src
     - tests
-  phpVersion: 80300
-  checkMissingIterableValueType: true
-  checkGenericClassInNonGenericObjectType: true
+  phpVersion: 80400
   checkMissingCallableSignature: true
   reportUnmatchedIgnoredErrors: true
-  ignoreErrors:
-    - '#Unsafe usage of new static#'
 
   excludePaths:
     - %currentWorkingDirectory%/bin*
