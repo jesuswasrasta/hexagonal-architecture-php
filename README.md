@@ -18,11 +18,12 @@ The minimum of features that is needed for developing CLI applications is includ
 * [Auto-wiring](https://symfony.com/doc/current/service_container/autowiring.html) on all classes in `/src`
 * Autoconfigure `Command` implementations directly to the CLI console application
 * [PHPUnit](https://phpunit.de/)
+* [PHPStan](https://phpstan.org/) static analysis
 
 ## How to run tests?
 
-Running PHPUnit test suites is possible by running `composer run tests`. The `/tests` folder gets auto-registered by
-composer, and follows the DDD application structure, but no actual tests are provided with the skeleton.
+Running PHPUnit test suites is possible by running `composer run test`. The `/tests` folder follows the DDD application structure.  
+PHPStan static analysis can be run with `composer run phpstan`.
 
 ## How to register a command to the CLI console?
 
@@ -34,5 +35,5 @@ in `config/services.php`.
 
 ## Environment requirements
 
-* PHP `>=8.0.2` with `ext-mbstring` extension enabled
+* PHP `>=8.4.1` with `ext-mbstring` extension enabled
 * [Composer](https://getcomposer.org/)
